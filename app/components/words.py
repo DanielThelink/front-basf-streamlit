@@ -33,7 +33,6 @@ def words():
                             margin-bottom: -1rem;
                             background-color: #FFF;
                             border-radius: 5px;
-                            border-left: 5px solid rgba(177, 182, 166, 0.8);
                             box-shadow: 10px 10px 5px #C1C1C1;
                         }
                         .css-znku1x p {
