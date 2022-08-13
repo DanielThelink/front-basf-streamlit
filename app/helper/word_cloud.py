@@ -59,7 +59,6 @@ def separe_text_by_group(data : list):
 
         '#0DFF00' : green_words,
         '#FFF200' : yellow_words,
-
     }
 
 def covert_data_text_to_string(data : list) :
@@ -82,7 +81,7 @@ def draw_word_cloud(data : list):
 
     color_to_words = separe_text_by_group(data)
 
-    default_color = '#92140C'
+    default_color = '#B22222'
 
     grouped_color_func = GroupedColorFunc(color_to_words, default_color)
 
