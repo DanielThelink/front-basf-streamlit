@@ -4,12 +4,8 @@ import json
 def get_nps_data ():
     return requests.get("https://artificialis-analisys-backend.herokuapp.com/nps").json()
     
-
-
-
 def post_analisys ():
     return requests.post("https://artificialis-analisys-backend.herokuapp.com/analisar").json()
-
 
 def get_search_word_cloud (filter_value: str):
     return requests.get(f"https://artificialis-analisys-backend.herokuapp.com/nuvemPalavras?filtro={filter_value}").json()   

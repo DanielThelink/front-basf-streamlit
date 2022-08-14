@@ -82,7 +82,6 @@ def dashboard():
                         "Neutro" : "yellow",
                         "Detrator" : "red"
                         }     
-          
     
     c1, c2 = st.columns((2, 4))
 
@@ -103,7 +102,12 @@ def dashboard():
         
         choice = st.selectbox("Tipo de Filtro:", filter_options)
         
-        text_filter = st.text_input("Filtro:")
+        options_filter = (["Promotor", "Neutro", "Detrator"] if choice == "NPS" else ["Positivo", "Neutro", "Negativo", "Misturado"])
+
+        if choice == 'NPS' or choice == "Sentimento":
+            text_filter = st.selectbox("Filtro:", options_filter)
+        else:
+            text_filter = st.text_input("Filtro:")
 
         if st.button ("Pesquisar"):
             current_commentary = get_search_commentary(choice_to_request[choice], text_filter)

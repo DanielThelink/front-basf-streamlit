@@ -50,58 +50,50 @@ def words():
                 """, unsafe_allow_html=True)
 
     current_words = get_current_word_cloud()
-    current_commentary = get_current_commentary()
+
     color_commentary = {
                         "Promotor": "green",
                         "Neutro" : "yellow",
                         "Detrator" : "red"
                         } 
 
+    st.pyplot(draw_word_cloud(current_words))
+
     text_filter = st.text_input("Filtro:")
 
     if st.button("Pesquisar"):
         current_words = get_search_word_cloud(text_filter)
 
-        
-    c1, c2 = st.columns((2, 2))
+    for commentary in current_words:
 
-    with c1:
-        st.pyplot(draw_word_cloud(current_words))
+        color = color_commentary [commentary["classificacao_nps"]]
 
-    with c2:
-       for commentary in current_commentary:
+        id = commentary["id_pesquisa"]
+        text = commentary["texto"]
+        classification = commentary["classificacao_nps"]
+        score = commentary["score"]
 
-            color = color_commentary [commentary["classificacao_nps"]]
+        formated_text = re.sub("\n", " ", text)
+            
+        st.markdown(
+            """
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+                    .box-""" + str(id) + """ {
+                        font-family: "Poppins", sans-serif;
+                        background-color: #FFF;
+                        padding: 15px;
+                        border-radius: 5px;
+                        margin: 10px 0px;
+                        border-left: 5px solid """ + color + """;
+                    }
+                </style> 
 
-            id = commentary["id"]
-            text = commentary["texto"]
-            date = commentary["data"] 
-            nps_value = commentary["valor_nps"]
-            classification = commentary["classificacao_nps"]
-            feeling = commentary["sentimento"]
-
-            formated_text = re.sub("\n", " ", text)
-               
-            st.markdown(
-                """
-                    <style>
-                        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-                        .box-""" + str(id) + """ {
-                            font-family: "Poppins", sans-serif;
-                            background-color: #FFF;
-                            padding: 15px;
-                            border-radius: 5px;
-                            margin: 10px 0px;
-                            border-left: 5px solid """ + color + """;
-                        }
-                    </style> 
-
-                    <div class="box-""" + str(id) + """">
-                        <p><b>""" + str(id) + """</b></p>
-                        <p>""" + formated_text.capitalize() + """</p>
-                        <p>Classificação : """ + classification + """, Valor do NPS : """ + str(nps_value) + """ , Sentimento : """ + feeling.capitalize() + """ </p>
-                        <p><i>""" + str(date) + """</i></p>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
+                <div class="box-""" + str(id) + """">
+                    <p><b>""" + str(id) + """</b></p>
+                    <p> Palavra-Chave : """ + formated_text.capitalize() + """</p>
+                    <p>Classificação : """ + classification  + """ , Score : """ + str(score) + """ </p>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
