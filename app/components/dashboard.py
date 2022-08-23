@@ -3,6 +3,7 @@ import re
 
 from app.services.artificialis_analisys import get_nps_data, get_search_commentary, get_current_commentary
 from app.helper.charts import draw_gauge_chart
+from app.helper.actions import get_action_by_commentary
 
 def dashboard():
 
@@ -114,6 +115,7 @@ def dashboard():
             
         for commentary in current_commentary:
 
+            action = get_action_by_commentary(commentary["texto"], commentary["classificacao_nps"])
             color = color_commentary [commentary["classificacao_nps"]]
 
             id = commentary["id"]
@@ -124,27 +126,53 @@ def dashboard():
             feeling = commentary["sentimento"]
 
             formated_text = re.sub("\n", " ", text)
-               
-            st.markdown(
-                """
-                    <style>
-                        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-                        .box-""" + str(id) + """ {
-                            font-family: "Poppins", sans-serif;
-                            background-color: #FFF;
-                            padding: 15px;
-                            border-radius: 5px;
-                            margin: 10px 0px;
-                            border-left: 5px solid """ + color + """;
-                        }
-                    </style> 
+            
+            if not action:
+                st.markdown(
+                    """
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+                            .box-""" + str(id) + """ {
+                                font-family: "Poppins", sans-serif;
+                                background-color: #FFF;
+                                padding: 15px;
+                                border-radius: 5px;
+                                margin: 10px 0px;
+                                border-left: 5px solid """ + color + """;
+                            }
+                        </style> 
 
-                    <div class="box-""" + str(id) + """">
-                        <p><b>""" + str(id) + """</b></p>
-                        <p>""" + formated_text.capitalize() + """</p>
-                        <p>Classificação : """ + classification + """, Valor do NPS : """ + str(nps_value) + """ , Sentimento : """ + feeling.capitalize() + """ </p>
-                        <p><i>""" + str(date) + """</i></p>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
+                        <div class="box-""" + str(id) + """">
+                            <p><b>""" + str(id) + """</b></p>
+                            <p>""" + formated_text.capitalize() + """</p>
+                            <p>Classificação : """ + classification + """, Valor do NPS : """ + str(nps_value) + """ , Sentimento : """ + feeling.capitalize() + """ </p>
+                            <p><i>""" + str(date) + """</i></p>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            else :
+                st.markdown(
+                    """
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+                            .box-""" + str(id) + """ {
+                                font-family: "Poppins", sans-serif;
+                                background-color: #FFF;
+                                padding: 15px;
+                                border-radius: 5px;
+                                margin: 10px 0px;
+                                border-left: 5px solid """ + color + """;
+                            }
+                        </style> 
+
+                        <div class="box-""" + str(id) + """">
+                            <p><b>""" + str(id) + """</b></p>
+                            <p>""" + formated_text.capitalize() + """</p>
+                            <p>Classificação : """ + classification + """, Valor do NPS : """ + str(nps_value) + """ , Sentimento : """ + feeling.capitalize() + """ </p>
+                            <p>Ação Recomendada : """ + action + """</p>
+                            <p><i>""" + str(date) + """</i></p>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
